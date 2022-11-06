@@ -5,7 +5,7 @@ def addToGroup(address, name):
   
   if name not in dict:
     ## Add the member to the group
-    myName = (str)(name).split()[1].split("'")[0]
+    myName = data.decode("utf-8").split()[1]
     dict[address] = myName
 
     ## Send to the client all the members in the group
@@ -42,13 +42,13 @@ dict = {}
 
 while True:
     data, addr = s.recvfrom(1024)
-    print(data)
-    if (data.decode("utf-8") != "b''"):
-      num = (str)(data.split()[0]).split("'")[1]
+    if ((str)(data) != "b''"):
+      dataStr = data.decode("utf-8")
+      num = dataStr.split()[0]
       if (num == '1'):
-        addToGroup(addr, str(data))
-      
-      print(dict)
+        addToGroup(addr, dataStr)
+    
+    print(dict)
 
 
   

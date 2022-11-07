@@ -9,9 +9,7 @@ def addToGroup(address, name):
     dict[address] = myName
 
     ## Send to the client all the members in the group
-
     firstName = (str)(list(dict.values())[0])
-
 
     if (firstName != myName):
         groupNames = firstName 
@@ -31,14 +29,16 @@ def addToGroup(address, name):
       
 
 
-
 args = sys.argv
-
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-port = (int)(args[1])
+
+if (len(args) == 1):
+  port = 12345
+else:
+  port = (int)(args[1])
+
 s.bind(('', port))
 dict = {}
-
 
 while True:
     data, addr = s.recvfrom(1024)

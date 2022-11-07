@@ -7,7 +7,7 @@ def addToGroup(address, name):
   if name not in dictMembers:
     ## Add the member to the group
     dictMembers[name] = address
-    dictMessage[name] = []
+    dictMessages[name] = []
     
     ## Send to the client all the members in the group
     firstName = (str)(list(dictMembers.keys())[0])
@@ -25,11 +25,11 @@ def addToGroup(address, name):
 
 
     ## Send a message to all the members that that someone has joined
-    joinMessage = myName + ' has joined'
+    joinMessage = name + ' has joined'
 
     for i in range(0, len(dictMembers)):
         key = (str)(list(dictMembers.keys())[i])
-        if (key != myName):
+        if (key != name):
           (dictMessages[key]).append(str.encode(joinMessage))      
 
 
@@ -46,9 +46,10 @@ def changeName(address, newName):
   dictMessages[newName] = dictMessages[oldName]
   del dictMessages[oldName]
 
-  ## Send a message to all the members that that someone changed his name
+  ## Send a message to all the members that someone changed his name
   changeMessage = oldName + ' changed his name to ' + newName
 
+  ## add the message to the dictionry of messages to everyone in the group
   for i in range(0, len(dictMembers)):
       key = (str)(list(dictMembers.keys())[i])
       if (key != newName):
@@ -58,15 +59,48 @@ def changeName(address, newName):
 
 
 ## Send a message to all the members
-def sendMessage(addr, data):
-  dataMessage = data
+def sendMessage(addr, dataMessage):
+
+  ## get the name of the cliet that send the message
   nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]
+  
+
+
+  ## the message to send all the members that in the group
+  sendMessage = (str)(nameOfSend) + ': ' + dataMessage
+  
+  ## add the message to the dictionry of messages to everyone in the group
+  for i in range(0, len(dictMembers)):
+      key = (str)(list(dictMembers.keys())[i])
+      if (key != (str)(nameOfSend)): 
+        (dictMessages[key]).append(str.encode(sendMessage))
+  s.sendto(b'', addr)
+
+
+
+def leaveGroup(addr):
+
+  ## get the name of the cliet that send the message
+  nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]  
+
+  ## the message to send all the members that in the group
+  leftMessage = (str)(nameOfSend) + 'has left the group'
+
+  del dictMembers[nameOfSend]
+  del dictMessages[nameOfSend]
+  
+  ## add the message to the dictionry of messages to everyone in the group
   for i in range(0, len(dictMembers)):
       key = (str)(list(dictMembers.keys())[i])
       if (key != (str)(nameOfSend)):
-        sendMessage = (str)(nameOfSend) + ': ' + dataMessage
-        (dictMessage[key]).append(str.encode(sendMessage))
+        (dictMessages[key]).append(str.encode(leftMessage))
+  s.sendto(b'', addr)
 
+def checkIfMemberExists(adress):
+  if adress in dictMembers.values():
+    return True
+  else:
+    return False
 
 
 args = sys.argv
@@ -88,13 +122,24 @@ while True:
       num,dataMessage = dataStr.split(' ', 1)
       if (num == '1'):
         addToGroup(addr, dataMessage)
-      if (num == '2'):
-        sendMessage(addr,dataMessage)
-      if (num == '3'):
-        changeName(addr, dataStr)
+      else:
+        if (checkIfMemberExists(addr)):
+          if (num == '2'):
+            sendMessage(addr,dataMessage)
+          elif (num == '3'):
+            changeName(addr, dataStr)
+          elif (num == '4'):
+            leaveGroup(addr)
+          elif (num == '5'):
+            print()
+          else:
+            s.sendto(b'Illegal request', addr)
+        else:
+          s.sendto(b'Illegal request', addr)
+
     
     print(dictMembers)
-    print(dictMessage)
+    print(dictMessages)
 
 
   

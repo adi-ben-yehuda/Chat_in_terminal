@@ -86,7 +86,7 @@ def leaveGroup(addr):
   nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]  
 
   ## the message to send all the members that in the group
-  leftMessage = (str)(nameOfSend) + 'has left the group'
+  leftMessage = (str)(nameOfSend)  + ' has left the group'
 
   del dictMembers[nameOfSend]
   del dictMessages[nameOfSend]
@@ -97,6 +97,20 @@ def leaveGroup(addr):
       if (key != (str)(nameOfSend)):
         (dictMessages[key]).append(str.encode(leftMessage))
   s.sendto(b'', addr)
+
+
+def getUpdate(addr):
+
+  ## get the name of the cliet that send the message
+  nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]
+
+  ## 
+  for i in range(0, len(dictMessages.values())):
+    updates = (str)(dictMessages[nameOfSend][1])
+    s.sendto(str.encode(updates), addr)
+
+
+
 
 def checkIfMemberExists(adress):
   if adress in dictMembers.values():
@@ -121,7 +135,7 @@ while True:
     data, addr = s.recvfrom(1024)
     if ((str)(data) != "b''"):
       dataStr = data.decode("utf-8")
-      num = (str)(data).split()[0]
+      num = (str)(dataStr).split()[0]
       if (num == '1'):
         addToGroup(addr, dataStr)
       else:
@@ -133,7 +147,7 @@ while True:
           elif (num == '4'):
             leaveGroup(addr)
           elif (num == '5'):
-            print()
+            getUpdate(addr)
           else:
             s.sendto(b'Illegal request', addr)
         else:

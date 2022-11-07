@@ -3,30 +3,33 @@ import sys
 
 def addToGroup(address, name):
   
-  if name not in dict:
+  if name not in dictMembers:
     ## Add the member to the group
     myName = data.decode("utf-8").split()[1]
-    dict[address] = myName
+    dictMembers[myName] = address
+    dictMessage[myName] = []
 
     ## Send to the client all the members in the group
-    firstName = (str)(list(dict.values())[0])
+    firstName = (str)(list(dictMembers.keys())[0])
 
     if (firstName != myName):
         groupNames = firstName 
-        for i in range(1, len(dict)):
-          value = (str)(list(dict.values())[i])
-          if (value != myName):
-            groupNames += ", " + (str)(value)
+        for i in range(1, len(dictMembers)):
+          key = (str)(list(dictMembers.keys())[i])
+          if (key != myName):
+            groupNames += ", " + (str)(key)
             
         s.sendto(str.encode(groupNames), address)
+    else:
+        s.sendto(b'', address)
+
 
     ## Send a message to all the members that that someone has joined
-    for i in range(0, len(dict)):
-        value = (str)(list(dict.values())[i])
-        if (value != myName):
+    for i in range(0, len(dictMembers)):
+        key = (str)(list(dictMembers.keys())[i])
+        if (key != myName):
           joinMessage = myName + ' has joined'
-          s.sendto(str.encode(joinMessage), list(dict.keys())[i])
-      
+          (dictMessage[key]).append(str.encode(joinMessage))      
 
 
 args = sys.argv
@@ -38,7 +41,8 @@ else:
   port = (int)(args[1])
 
 s.bind(('', port))
-dict = {}
+dictMembers = {}
+dictMessage = {}
 
 while True:
     data, addr = s.recvfrom(1024)
@@ -48,7 +52,7 @@ while True:
       if (num == '1'):
         addToGroup(addr, dataStr)
     
-    print(dict)
+    print(dictMembers)
 
 
   

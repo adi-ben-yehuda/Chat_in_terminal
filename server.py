@@ -8,7 +8,7 @@ def addToGroup(address, name):
     ## Add the member to the group
     dictMembers[name] = address
     dictMessage[name] = []
-
+    
     ## Send to the client all the members in the group
     firstName = (str)(list(dictMembers.keys())[0])
 
@@ -25,11 +25,36 @@ def addToGroup(address, name):
 
 
     ## Send a message to all the members that that someone has joined
+    joinMessage = myName + ' has joined'
+
     for i in range(0, len(dictMembers)):
         key = (str)(list(dictMembers.keys())[i])
-        if (key != name):
-          joinMessage = name + ' has joined'
-          (dictMessage[key]).append(str.encode(joinMessage))      
+        if (key != myName):
+          (dictMessages[key]).append(str.encode(joinMessage))      
+
+
+## Change the name of a member in the group to a new name
+def changeName(address, newName):
+  newName = newName.split()[1]
+
+  ## Change the name from dictionary members
+  dictMembers[newName] = address
+  oldName = list(dictMembers.keys())[list(dictMembers.values()).index(address)]
+  del dictMembers[oldName]
+
+  ## Change the name from dictionary messages
+  dictMessages[newName] = dictMessages[oldName]
+  del dictMessages[oldName]
+
+  ## Send a message to all the members that that someone changed his name
+  changeMessage = oldName + ' changed his name to ' + newName
+
+  for i in range(0, len(dictMembers)):
+      key = (str)(list(dictMembers.keys())[i])
+      if (key != newName):
+        (dictMessages[key]).append(str.encode(changeMessage)) 
+
+  s.sendto(b'', address)
 
 
 ## Send a message to all the members
@@ -54,7 +79,7 @@ else:
 
 s.bind(('', port))
 dictMembers = {}
-dictMessage = {}
+dictMessages = {}
 
 while True:
     data, addr = s.recvfrom(1024)
@@ -65,6 +90,8 @@ while True:
         addToGroup(addr, dataMessage)
       if (num == '2'):
         sendMessage(addr,dataMessage)
+      if (num == '3'):
+        changeName(addr, dataStr)
     
     print(dictMembers)
     print(dictMessage)

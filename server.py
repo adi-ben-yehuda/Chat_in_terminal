@@ -3,15 +3,10 @@ import sys
 
  ## Add member to the group
 def addToGroup(address, data):
-
   myName = (str)(data).split(' ', 1)
   
-  ## If the client send only number without name
-  if (len(myName) == 1):
-    s.sendto(b'Illegal request', address)
-  
   ## Check if the name is already in the group
-  elif (myName[1] not in dictMembers):
+  if (myName[1] not in dictMembers):
     myName = myName[1]
     ## Add the member to the group
     dictMembers[myName] = address
@@ -134,7 +129,7 @@ def checkIfMemberExists(adress):
     return False
 
 ## Check if the data is valid
-def checkIfDataIsValid(data):
+def checkIfDataIsValid(data, addr):
   text = (str)(data).split(' ', 1)
   
   ## If the client send not only a number
@@ -143,6 +138,31 @@ def checkIfDataIsValid(data):
     return False
   else:
     return True
+
+## Check if the name is not empty or includes only spaces or is numeric
+def checkIfDataIsName(data, addr):
+  name = (str)(data).split(' ', 1)
+  ## If the client send only number without name
+  if (len(name) == 1):
+    s.sendto(b'Illegal request', addr)
+  elif (len(name[1]) == 0 or name[1][0] == ' ' or name[1].isnumeric()):
+    s.sendto(b'Illegal request', addr)
+    return False
+  else:
+    return True
+
+## Check if message is not empty or includes only spaces
+def checkIfDataIsNotEmpty(data, addr):
+  name = (str)(data).split(' ', 1)
+  ## If the client send only number without text
+  if (len(name) == 1):
+    s.sendto(b'Illegal request', addr)
+  elif (len(name[1]) == 0 or name[1].isspace()):
+    s.sendto(b'Illegal request', addr)
+    return False
+  else:
+    return True
+  
 
 ## Get data from the command line
 args = sys.argv
@@ -160,23 +180,33 @@ dictMessages = {}
 ## Get the data from the client and act according to his request
 while True:
     data, addr = s.recvfrom(1024)
+    ## When the user press enter
     if ((str)(data) != "b''"):
       dataStr = data.decode("utf-8")
-      num = (str)(dataStr).split()[0]
-      if (num == '1'):
-        addToGroup(addr, dataStr)
-      elif (checkIfMemberExists(addr)):
-          if (num == '2'):
-            sendMessage(addr,dataStr)
-          elif (num == '3'):
-            changeName(addr, dataStr)
-          elif (num == '4'):
-            if (checkIfDataIsValid(dataStr)):
-              leaveGroup(addr)
-          elif (num == '5'):
-            if (checkIfDataIsValid(dataStr)):
-              getUpdate(addr)
-          else:
-            s.sendto(b'Illegal request', addr)
+      ## When the data is only spaces
+      if (dataStr.isspace()):
+        s.sendto(b'Illegal request', addr)
       else:
-        s.sendto(b'Illegal request', addr) 
+        num = (str)(dataStr).split()[0]
+        if (num == '1'):
+          if(checkIfDataIsName(dataStr, addr)):
+            addToGroup(addr, dataStr)
+        elif (checkIfMemberExists(addr)):
+            if (num == '2'):
+              if(checkIfDataIsNotEmpty(dataStr, addr)):
+                sendMessage(addr,dataStr)
+            elif (num == '3'):
+              if(checkIfDataIsName(dataStr, addr)):
+                changeName(addr, dataStr)
+            elif (num == '4'):
+              if (checkIfDataIsValid(dataStr, addr)):
+                leaveGroup(addr)
+            elif (num == '5'):
+              if (checkIfDataIsValid(dataStr, addr)):
+                getUpdate(addr)
+            else:
+              s.sendto(b'Illegal request', addr)
+        else:
+          s.sendto(b'Illegal request', addr)
+    else:
+      s.sendto(b'Illegal request', addr)

@@ -12,7 +12,7 @@ else:
 
 ## Create socket
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.sendto(b'', (ip, port))
+##s.sendto(b'', (ip, port))
 
 ## Get data from the user and send it to the server
 while True:
@@ -33,5 +33,3 @@ while True:
                 print(update.decode("utf-8"))
 
         else: print(dataStr)
-
-    

@@ -87,7 +87,7 @@ def sendMessage(addr, dataMessage):
 
 ## Delete member from the group
 def leaveGroup(addr):
-  ## Get the name of the cliet that send the message
+  ## Get the name of the client that send the message
   nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]  
 
   ## The message to send all the members that in the group
@@ -108,7 +108,7 @@ def leaveGroup(addr):
 ## Send updates to the member when asked
 def getUpdate(addr):
 
-  ## Get the name of the cliet that send the message
+  ## Get the name of the client that send the message
   nameOfSend = list(dictMembers.keys())[list(dictMembers.values()).index(addr)]
 
   numOfUpdates = len(dictMessages[nameOfSend])  
@@ -164,11 +164,11 @@ def checkIfDataIsNotEmpty(data, addr):
     return True
   
 
-## Get data from the command line and check if valid.
-args = sys.argv
-##args = ["djkdkd", "12345"]
+## Create socket
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+## Get data from the command line and check if valid.
+args = sys.argv
 if(len(args) == 2 and args[1].isnumeric() and (int)(args[1]) in range(0, 65535)):
   port = (int)(args[1])
   s.bind(('', port))

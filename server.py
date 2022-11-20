@@ -157,7 +157,7 @@ def checkIfDataIsNotEmpty(data, addr):
   ## If the client send only number without text
   if (len(name) == 1):
     s.sendto(b'Illegal request', addr)
-  elif (len(name[1]) == 0 or name[1].isspace()):
+  elif (len(name[1]) == 0):
     s.sendto(b'Illegal request', addr)
     return False
   else:

@@ -33,7 +33,7 @@ For example:
 ```
 python server.py 12345
 ```
-Open new terminals for the clients:
+Open new terminals for the clients and run the following command:
 
 ```
 python client.py ip port

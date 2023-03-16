@@ -40,7 +40,7 @@ python client.py ip port
 ```
 For example: 
 ```
-./client.out 127.0.0.1 12345
+python client.py 127.0.0.1 12345
 ```
 ## Project status 
 The project is in the beginning stages and will develop over time.

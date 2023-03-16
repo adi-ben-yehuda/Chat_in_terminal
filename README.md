@@ -1,9 +1,7 @@
 # Chat
 
 ## Introduction
-Create a chat that few pepole can communicate with each other. All the messages in the chat sent to the server that manage the chat.
-Given a new vector, which does not appear in the tagged vectors database, the algorithm will check which of the tagged vectors in the database, they are the closest to the new vector.
-Then, it takes the K closest ("similar") vectors to the input, checks what their labeling is, and classifies the new vector according to the most common labeling.
+Create a chat using UDP Protocol that allows clients to communicate with each other. All the messages in the chat sent to the server that manage the chat.
 
 ## Table of contents
 * [General Information](#general-information)
@@ -20,7 +18,6 @@ Then, the algorithm takes the K closest ("similar") vectors to the input and che
 
 ## Installation
 Before installing this project, you need to install on your computer:
-* IDE that supports c++ (like Visual Studio Code or CLion).
 * Git
 
 After it, run the following commands in the terminal:

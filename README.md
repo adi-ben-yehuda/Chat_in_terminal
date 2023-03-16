@@ -23,15 +23,25 @@ Before installing this project, you need to install on your computer:
 After it, run the following commands in the terminal:
 
 ```
-git clone https://github.com/ShaharMosh/advanced_ex2.git
-make
-./a.out k filename distance
+git clone https://github.com/ShaharMosh/network_ex_1.git
+```
+Run the server:
+```
+python server.py port
 ```
 For example: 
 ```
-./a.out 3 iris_classified.csv MAN
+python server.py 12345
 ```
+Open new terminals for the clients:
 
+```
+python client.py ip port
+```
+For example: 
+```
+./client.out 127.0.0.1 12345
+```
 ## Project status 
 The project is in the beginning stages and will develop over time.
 

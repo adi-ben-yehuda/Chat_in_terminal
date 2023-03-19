@@ -23,7 +23,7 @@ Before installing this project, you need to install on your computer:
 After it, run the following commands in the terminal:
 
 ```
-git clone https://github.com/ShaharMosh/network_ex_1.git
+git clone https://github.com/adi-ben-yehuda/Chat.git
 ```
 Run the server:
 ```

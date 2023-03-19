@@ -12,6 +12,7 @@ In this project, we would like to implement a simple chat using UDP Protocol. Ou
 
 ## General Information
 This project contains two parts: a server and a client.
+
 The server can receive 5 types of messages:
 1. Registration: The customer sending this message wishes to join the group chat. The message will be in the following format: 1 [Name]
 When the server receives such a message, it adds the sender to the group. This means that:

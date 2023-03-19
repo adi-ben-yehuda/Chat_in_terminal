@@ -6,9 +6,7 @@ In this project, we would like to implement a simple chat using UDP Protocol. Ou
 ## Table of contents
 * [General Information](#general-information)
 * [Installation](#installation)
-* [Project status](#project-status)
 * [Contact](#Contact)
-
 
 ## General Information
 This project contains two parts: a server and a client.
@@ -60,8 +58,6 @@ For example:
 ```
 python client.py 127.0.0.1 12345
 ```
-## Project status 
-The project is in the beginning stages and will develop over time.
 
 ## Contact
 Created by @adi-ben-yehuda and @ShaharMosh - feel free to contact us!
